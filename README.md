@@ -1,3 +1,9 @@
+# xiyue-food
+
+玺月餐厅：家庭共享的宝宝三餐菜单与菜谱手机网页。
+
+---
+
 # vinext-starter
 
 A clean full-stack starter running on [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and Drizzle support.
