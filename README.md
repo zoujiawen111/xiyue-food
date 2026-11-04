@@ -1,6 +1,19 @@
-# xiyue-food
+# 玺月餐厅 · xiyue-food
 
-玺月餐厅：家庭共享的宝宝三餐菜单与菜谱手机网页。
+家庭共享的宝宝三餐菜单与菜谱手机网页。
+
+- 网页使用地址：https://zoujiawen111.github.io/xiyue-food/
+- 备用使用地址：https://xiyue-family-kitchen.pureturaco.chatgpt.site/
+- 首次使用点击「开启我们的家庭餐厅」，再用「邀请家人」复制你们家的专属链接。
+- 家庭成员通过邀请链接共享菜谱、图片和菜单，凭证由服务器校验。
+- 编辑页可滚动；导出图片固定为一屏比例，内容过多会提示精简。
+
+## GitHub Pages 发布
+
+仓库 Settings → Pages → Deploy from a branch，选择 `main` 分支和 `/docs` 文件夹后保存。
+`docs/` 是已构建的网页，可直接发布；修改前端后执行 `npm run build:pages` 并提交生成文件。
+GitHub Pages 提供网页，Cloudflare D1/R2 提供受邀请凭证保护的云端数据和图片。
+不要将家庭邀请链接或访问令牌提交到仓库。
 
 ---
 

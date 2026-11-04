@@ -3,7 +3,14 @@ import { runWithConnectorBinding } from "../lib/connector-context";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
 
 const worker = {
-  fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
+  async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
+    const origin=request.headers.get('Origin');
+    const isKitchen=new URL(request.url).pathname==='/api/kitchen';
+    const allowed=isKitchen && origin==='https://zoujiawen111.github.io';
+    if(isKitchen && request.method==='OPTIONS') {
+      if(!allowed)return new Response('Origin not allowed',{status:403});
+      return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':origin!,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Authorization, Content-Type','Access-Control-Max-Age':'600','Vary':'Origin'}});
+    }
     let binding = ctx.props?.CONNECTORS;
     // Local preview emulates the same request-scoped capability. This branch and
     // the auxiliary service binding are absent from production builds.
@@ -23,7 +30,10 @@ const worker = {
         },
       };
     }
-    return runWithConnectorBinding(binding, () => handler.fetch(request, env, ctx));
+    const response=await runWithConnectorBinding(binding, () => handler.fetch(request, env, ctx));
+    if(!allowed)return response;
+    const headers=new Headers(response.headers);headers.set('Access-Control-Allow-Origin',origin!);headers.append('Vary','Origin');
+    return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
   },
 };
 

@@ -12,7 +12,7 @@ export async function GET(req:Request) {
 }
 export async function POST(req:Request) {
  try {
- if(req.headers.get('Origin') && req.headers.get('Origin')!==new URL(req.url).origin)return json({error:'请求来源无效'},403);
+ if(req.headers.get('Origin') && req.headers.get('Origin')!==new URL(req.url).origin && req.headers.get('Origin')!=='https://zoujiawen111.github.io')return json({error:'请求来源无效'},403);
  const len=Number(req.headers.get('content-length')||0);if(len>8_000_000)return json({error:'图片过大'},413);
  const url=new URL(req.url);
  if(url.searchParams.get('action')==='create') { const id=crypto.randomUUID(); const token=Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,'0')).join(''); await env.DB!.prepare('INSERT INTO families(id,token_hash,created) VALUES(?,?,?)').bind(id,await hash(token),new Date().toISOString()).run();return json({token}); }
